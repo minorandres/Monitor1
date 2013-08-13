@@ -51,20 +51,21 @@ public class ConectorSQL {
         return true;
     }
      
-     public void getTableSpaces() {
+     public String getTableSpaces() {
+         String datos="";
          try {
-             stmt = conexion.createStatement();
+             stmt = conexion.createStatement();             
              ResultSet resultados = stmt.executeQuery( "SELECT * FROM pg_tablespace;" );
              while ( resultados.next() ) {
                 String  name = resultados.getString("spcname");
-                System.out.println( "NAME = " + name );
-                System.out.println();
+                datos+=name+",";
              }
              resultados.close();
              stmt.close();
             // conexion.close();
          } catch (SQLException ex) {
              Logger.getLogger(ConectorSQL.class.getName()).log(Level.SEVERE, null, ex);
-         }
+         }         
+             return datos;
      }
 }

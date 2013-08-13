@@ -106,14 +106,14 @@
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\Maynor\Google Drive\UNA\Adm BD\Monitores\Monitor 1\LogInDB\Imagenes\postg.png"/>
+              <Image iconType="3" name="/Imagenes/postg.png"/>
             </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\Maynor\Google Drive\UNA\Adm BD\Monitores\Monitor 1\LogInDB\Imagenes\hdr_right.png"/>
+              <Image iconType="3" name="/Imagenes/hdr_right.png"/>
             </Property>
           </Properties>
         </Component>

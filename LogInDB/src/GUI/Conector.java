@@ -63,11 +63,11 @@ public class Conector extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("D:\\Maynor\\Google Drive\\UNA\\Adm BD\\Monitores\\Monitor 1\\LogInDB\\Imagenes\\postg.png")); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/postg.png"))); // NOI18N
 
-        jLabel2.setIcon(new javax.swing.ImageIcon("D:\\Maynor\\Google Drive\\UNA\\Adm BD\\Monitores\\Monitor 1\\LogInDB\\Imagenes\\hdr_right.png")); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/hdr_right.png"))); // NOI18N
 
-        jLabel3.setIcon(new javax.swing.ImageIcon("D:\\Maynor\\Google Drive\\UNA\\Adm BD\\Monitores\\Monitor 1\\LogInDB\\Imagenes\\bd.jpg")); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/bd.jpg"))); // NOI18N
 
         jLabel4.setText("Usuario:");
 
@@ -235,6 +235,7 @@ public class Conector extends javax.swing.JFrame {
                     csv.escritor(recordarEstosDatos());
                 }
             }
+             new TableSpaces().setVisible(true);
     }//GEN-LAST:event_botonConectarActionPerformed
 
     private void fieldUsuarioFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldUsuarioFocusGained
@@ -289,7 +290,7 @@ public class Conector extends javax.swing.JFrame {
     }
     
     CSVManager csv=new CSVManager();
-    ConectorSQL conectorBD=new ConectorSQL();
+    public static ConectorSQL conectorBD=new ConectorSQL();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonConectar;
     private javax.swing.JCheckBox checkRecordar;
