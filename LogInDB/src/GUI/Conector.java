@@ -12,6 +12,7 @@ import CSV.CSVManager;
 public class Conector extends javax.swing.JFrame {
 
     /**
+     * 
      * Creates new form Conector
      */
     public Conector() {
@@ -236,6 +237,7 @@ public class Conector extends javax.swing.JFrame {
                 }
             }
              new TableSpaces().setVisible(true);
+             this.setVisible(false);
     }//GEN-LAST:event_botonConectarActionPerformed
 
     private void fieldUsuarioFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldUsuarioFocusGained

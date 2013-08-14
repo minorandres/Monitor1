@@ -3,18 +3,8 @@
 <Form version="1.5" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
     <Component class="javax.swing.JLabel" name="jLabel1">
-      <Properties>
-        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="D:\Maynor\Google Drive\UNA\Adm BD\Monitores\Monitor 1\LogInDB\Imagenes\postg.png"/>
-        </Property>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
-      <Properties>
-        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="D:\Maynor\Google Drive\UNA\Adm BD\Monitores\Monitor 1\LogInDB\Imagenes\hdr_right.png"/>
-        </Property>
-      </Properties>
     </Component>
   </NonVisualComponents>
   <Properties>
@@ -129,7 +119,7 @@
             <Component class="javax.swing.JTable" name="jTable1">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="4" rowCount="11">
+                  <Table columnCount="4" rowCount="0">
                     <Column editable="true" title="TableSpace" type="java.lang.String"/>
                     <Column editable="true" title="Tama&#xf1;o Total" type="java.lang.Object"/>
                     <Column editable="true" title="Ocupado" type="java.lang.Object"/>

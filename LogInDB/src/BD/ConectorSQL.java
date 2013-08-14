@@ -55,10 +55,13 @@ public class ConectorSQL {
          String datos="";
          try {
              stmt = conexion.createStatement();             
-             ResultSet resultados = stmt.executeQuery( "SELECT * FROM pg_tablespace;" );
+             ResultSet resultados = stmt.executeQuery( ""
+              + "select  spcname,pg_size_pretty(pg_tablespace_size(spcname)) "
+                     + "from pg_tablespace;");
              while ( resultados.next() ) {
                 String  name = resultados.getString("spcname");
-                datos+=name+",";
+                String size= resultados.getString("pg_size_pretty");
+                datos+=name+","+size+"\n";
              }
              resultados.close();
              stmt.close();

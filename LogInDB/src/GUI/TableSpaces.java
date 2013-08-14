@@ -23,10 +23,14 @@ public class TableSpaces extends javax.swing.JFrame {
     }
     
     public void addtablespaceToTable(){
-        String[] dataArray;        
-        dataArray = Conector.conectorBD.getTableSpaces().split(",");
-        DefaultTableModel modelo=new DefaultTableModel();
-        modelo.addRow(dataArray);
+        String[] filas; 
+        String[] columnas;
+        filas = Conector.conectorBD.getTableSpaces().split("\n");        
+        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+        for (String fila : filas) {
+            columnas= fila.split(",");            
+            modelo.addRow(new Object[]{columnas[0],columnas[1],null,null});//columnas[2],columnas[3]});
+       } 
     }
 
     /**
@@ -47,10 +51,6 @@ public class TableSpaces extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("D:\\Maynor\\Google Drive\\UNA\\Adm BD\\Monitores\\Monitor 1\\LogInDB\\Imagenes\\postg.png")); // NOI18N
-
-        jLabel2.setIcon(new javax.swing.ImageIcon("D:\\Maynor\\Google Drive\\UNA\\Adm BD\\Monitores\\Monitor 1\\LogInDB\\Imagenes\\hdr_right.png")); // NOI18N
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -63,17 +63,7 @@ public class TableSpaces extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "TableSpace", "Tamaño Total", "Ocupado", "Libre"
