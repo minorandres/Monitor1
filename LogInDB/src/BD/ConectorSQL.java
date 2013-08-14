@@ -53,7 +53,7 @@ public class ConectorSQL {
      
      public String getTableSpaces() {
          String datos="";
-         try {
+         try {// get tables=  select * from pg_tables where tablespace = 'tablespace1';
              stmt = conexion.createStatement();             
              ResultSet resultados = stmt.executeQuery( ""
               + "select  spcname,pg_size_pretty(pg_tablespace_size(spcname)) "
