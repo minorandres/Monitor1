@@ -19,6 +19,7 @@ public class Conector extends javax.swing.JFrame {
         initComponents();        
         setDatosArchivo();
         this.setResizable(false);
+        
     }
 
     
