@@ -18,8 +18,7 @@ public class TableSpaces extends javax.swing.JFrame {
     public TableSpaces() {
         initComponents();        
         addtablespaceToTable();
-        this.setResizable(true);
-        //mmmm hola soy una linea insípida
+        this.setResizable(false);
         
     }
     

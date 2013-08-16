@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.3" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
     <Container class="javax.swing.JPanel" name="jPanel1">
 
@@ -156,11 +156,9 @@
                                   </Group>
                                   <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                       <Component id="campoContraseña" pref="216" max="32767" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="campoUsuario" max="32767" attributes="0"/>
-                                          <Component id="campoPuerto" max="32767" attributes="0"/>
-                                          <Component id="campoIP" pref="216" max="32767" attributes="0"/>
-                                      </Group>
+                                      <Component id="campoUsuario" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="campoPuerto" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="campoIP" alignment="0" pref="216" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>

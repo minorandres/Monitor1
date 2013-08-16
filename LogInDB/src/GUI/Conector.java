@@ -4,34 +4,61 @@
  */
 package GUI;
 import BD.ConectorSQL;
-import CSV.CSVManager;
+import Modelo.LogIn;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Observable;
+import java.util.Observer;
+import javax.swing.JOptionPane;
 /**
  *
  * @author casa
  */
-public class Conector extends javax.swing.JFrame {
+public class Conector extends javax.swing.JFrame implements Observer{
 
     /**
      * 
      * Creates new form Conector
      */
     public Conector() {
-        initComponents();        
-        setDatosArchivo();
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         this.setResizable(false);
-        
+        ajustarComponentes();
+        login=login.obtenerInstancia(); 
+        login.addObserver(this);
+        setDatosArchivo();       
+    }
+
+    public void ajustarComponentes() {
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                SalirPrograma();
+            }
+        });
+        initComponents();
+    }
+
+    public void SalirPrograma() {
+        if ((JOptionPane.showConfirmDialog(this,
+                "¿Realmente desea salir de la aplicación?", "Salir del Monitor 1 de Bases de Datos",
+                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)
+                == JOptionPane.YES_OPTION)) {
+            System.exit(0);
+        }
     }
 
     
     //para poner los datos que han sido recordados
-    public void setDatosArchivo(){       
-        String[] valores= csv.lector();
-        if(valores!=null){
-        this.fieldUsuario.setText(valores[0]);
-        this.fieldContrasena.setText(valores[1]);
-        this.fieldPuerto.setText(valores[2]);
-        this.fieldIP.setText(valores[3]);
-        }
+    public void setDatosArchivo(){     
+       String[] valores= login.getDatos();
+          if(valores!=null){
+            this.fieldUsuario.setText(valores[0]);
+            this.fieldContrasena.setText(valores[1]);
+            this.fieldPuerto.setText(valores[2]);
+            this.fieldIP.setText(valores[3]);
+            this.checkRecordar.setSelected(true);
+         } 
     }
     
     // llamado cuando se presiona boton conectar
@@ -54,11 +81,11 @@ public class Conector extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         fieldUsuario = new javax.swing.JTextField();
-        fieldContrasena = new javax.swing.JTextField();
         fieldPuerto = new javax.swing.JTextField();
         fieldIP = new javax.swing.JTextField();
         botonConectar = new javax.swing.JButton();
         checkRecordar = new javax.swing.JCheckBox();
+        fieldContrasena = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -79,7 +106,6 @@ public class Conector extends javax.swing.JFrame {
 
         jLabel7.setText("IP:");
 
-        fieldUsuario.setText("Usuario de la BD");
         fieldUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fieldUsuarioActionPerformed(evt);
@@ -91,19 +117,6 @@ public class Conector extends javax.swing.JFrame {
             }
         });
 
-        fieldContrasena.setText("Contraseña BD");
-        fieldContrasena.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fieldContrasenaActionPerformed(evt);
-            }
-        });
-        fieldContrasena.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                fieldContrasenaFocusGained(evt);
-            }
-        });
-
-        fieldPuerto.setText("5432");
         fieldPuerto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fieldPuertoActionPerformed(evt);
@@ -152,12 +165,12 @@ public class Conector extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(botonConectar))
                     .addComponent(fieldUsuario)
-                    .addComponent(fieldContrasena)
                     .addComponent(fieldPuerto)
-                    .addComponent(fieldIP))
+                    .addComponent(fieldIP)
+                    .addComponent(fieldContrasena))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(4, 4, 4)
                 .addComponent(jLabel1)
@@ -217,10 +230,6 @@ public class Conector extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_fieldUsuarioActionPerformed
 
-    private void fieldContrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldContrasenaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_fieldContrasenaActionPerformed
-
     private void fieldPuertoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldPuertoActionPerformed
 //         TODO add your handling code here:
     }//GEN-LAST:event_fieldPuertoActionPerformed
@@ -231,23 +240,23 @@ public class Conector extends javax.swing.JFrame {
 
     private void botonConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConectarActionPerformed
             if(conectorBD.conectar(this.fieldUsuario.getText(),
-            this.fieldContrasena.getText(),this.fieldPuerto.getText(),
-            this.fieldIP.getText())){
-                if(this.checkRecordar.isSelected()){
-                    csv.escritor(recordarEstosDatos());
-                }
+                this.fieldContrasena.getText(),this.fieldPuerto.getText(),
+                this.fieldIP.getText())){
+                    if(this.checkRecordar.isSelected()){
+                        login.escritor(recordarEstosDatos());
+                        login.setValores(this.fieldUsuario.getText(), this.fieldContrasena.getText(),
+                this.fieldPuerto.getText(), this.fieldIP.getText());
+                    }
+                ventanaPrincipal=ventanaPrincipal.obtenerInstancia();
+                this.setVisible(false);
+                ventanaPrincipal.setVisible(true);
             }
-             new TableSpaces().setVisible(true);
-             this.setVisible(false);
+              
     }//GEN-LAST:event_botonConectarActionPerformed
 
     private void fieldUsuarioFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldUsuarioFocusGained
         
     }//GEN-LAST:event_fieldUsuarioFocusGained
-
-    private void fieldContrasenaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldContrasenaFocusGained
-        this.fieldContrasena.setText("");
-    }//GEN-LAST:event_fieldContrasenaFocusGained
 
     private void checkRecordarFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_checkRecordarFocusGained
 
@@ -292,12 +301,12 @@ public class Conector extends javax.swing.JFrame {
         });
     }
     
-    CSVManager csv=new CSVManager();
+   
     public static ConectorSQL conectorBD=new ConectorSQL();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonConectar;
     private javax.swing.JCheckBox checkRecordar;
-    private javax.swing.JTextField fieldContrasena;
+    private javax.swing.JPasswordField fieldContrasena;
     private javax.swing.JTextField fieldIP;
     private javax.swing.JTextField fieldPuerto;
     private javax.swing.JTextField fieldUsuario;
@@ -310,11 +319,28 @@ public class Conector extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
-
+    public VentanaPrincipal ventanaPrincipal; 
+    public LogIn login;
+    
     private String recordarEstosDatos() {
         return this.fieldUsuario.getText()+","+
                this.fieldContrasena.getText()+","+
                this.fieldPuerto.getText()+","+
                this.fieldIP.getText();
     }
+
+    @Override
+    public void update(Observable o, Object arg) {         
+         String[] valores= login.getDatos();
+          if(valores!=null){
+            this.fieldUsuario.setText(valores[0]);
+            this.fieldContrasena.setText(valores[1]);
+            this.fieldPuerto.setText(valores[2]);
+            this.fieldIP.setText(valores[3]);
+            this.checkRecordar.setSelected(true);
+        }
+       
+    }
 }
+
+
