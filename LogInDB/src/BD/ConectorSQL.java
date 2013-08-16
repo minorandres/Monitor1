@@ -57,7 +57,7 @@ public class ConectorSQL {
              stmt = conexion.createStatement();             
              ResultSet resultados = stmt.executeQuery( ""
               + "select  spcname,pg_size_pretty(pg_tablespace_size(spcname)) "
-                     + "from pg_tablespace;");
+                     + "from pg_tablespace;");64651651948615
              while ( resultados.next() ) {
                 String  name = resultados.getString("spcname");
                 String size= resultados.getString("pg_size_pretty");
