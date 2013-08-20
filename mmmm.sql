@@ -115,4 +115,10 @@ maynor=# vacuum;
 --------+---------+------------+-------+-----------------+-------
  public | musica  | 16 kB      | 40 kB |            28.6 | 57344
  
- 
+ /*5-Cada vez que se le de click, a un tablespace el mismo deberá desplegar mediante un gráfico de pastel,
+ todas aquellas tablas y objetos que son contenidos en dicho tablespace. Además deberá indicar el tamaño
+ relativo de dichos objetos.TAMANO EN BYTES*/
+ SELECT   c.relname,t.spcname,(pg_total_relation_size(c.oid))as TAM_EN_BYTES 
+	FROM pg_class c,pg_tablespace t 
+	WHERE t.spcname='pg_default'
+	ORDER BY spcname,tam_en_bytes DESC;
