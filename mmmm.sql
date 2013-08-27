@@ -149,55 +149,60 @@ postgres=# select c.relname,c.reltablespace from pg_class c;
  pg_toast_16410                          |             0
  pg_toast_16410_index                    |             0
  musica                                  |             0
+ lupe                                    |         16417
  pg_toast_2619                           |             0
  pg_toast_2619_index                     |             0
  pg_authid_rolname_index                 |          1664
  pg_authid_oid_index                     |          1664
  pg_attribute_relid_attnam_index         |             0
  pg_attribute_relid_attnum_index         |             0
+ pg_toast_1255                           |             0
 
 
 postgres=# select spcname,oid from pg_tablespace;
-  spcname   | oid
-------------+------
- pg_default | 1663
- pg_global  | 1664
-(2 filas)
+  spcname    |  oid
+-------------+-------
+pg_default   |  1663
+pg_global    |  1664
+tablaespacio | 16417
 
 
 postgres=# select relname,reltablespace,t.oid from pg_class c,pg_tablespace t
-where c.reltablespace=t.oid
-postgres-# ;
-                 relname                 | reltablespace | oid
------------------------------------------+---------------+------
- pg_authid_rolname_index                 |          1664 | 1664
- pg_authid_oid_index                     |          1664 | 1664
- pg_toast_2964                           |          1664 | 1664
- pg_toast_2964_index                     |          1664 | 1664
- pg_auth_members_role_member_index       |          1664 | 1664
- pg_auth_members_member_role_index       |          1664 | 1664
- pg_toast_2396                           |          1664 | 1664
- pg_toast_2396_index                     |          1664 | 1664
- pg_database_datname_index               |          1664 | 1664
- pg_database_oid_index                   |          1664 | 1664
- pg_tablespace_oid_index                 |          1664 | 1664
- pg_tablespace_spcname_index             |          1664 | 1664
- pg_pltemplate_name_index                |          1664 | 1664
- pg_shdepend_depender_index              |          1664 | 1664
- pg_shdepend_reference_index             |          1664 | 1664
- pg_shdescription_o_c_index              |          1664 | 1664
- pg_authid                               |          1664 | 1664
- pg_shseclabel_object_index              |          1664 | 1664
- pg_database                             |          1664 | 1664
- pg_db_role_setting                      |          1664 | 1664
- pg_tablespace                           |          1664 | 1664
- pg_pltemplate                           |          1664 | 1664
- pg_auth_members                         |          1664 | 1664
- pg_shdepend                             |          1664 | 1664
- pg_shdescription                        |          1664 | 1664
- pg_shseclabel                           |          1664 | 1664
- pg_db_role_setting_databaseid_rol_index |          1664 | 1664
-(27 filas)
+postgres-# where c.reltablespace=t.oid;
+                 relname                 | reltablespace |  oid
+-----------------------------------------+---------------+-------
+ lupe                                    |         16417 | 16417
+ pg_authid_rolname_index                 |          1664 |  1664
+ pg_authid_oid_index                     |          1664 |  1664
+ pg_toast_2964                           |          1664 |  1664
+ pg_toast_2964_index                     |          1664 |  1664
+ pg_auth_members_role_member_index       |          1664 |  1664
+ pg_auth_members_member_role_index       |          1664 |  1664
+ pg_toast_2396                           |          1664 |  1664
+ pg_toast_2396_index                     |          1664 |  1664
+ pg_database_datname_index               |          1664 |  1664
+ pg_database_oid_index                   |          1664 |  1664
+ pg_tablespace_oid_index                 |          1664 |  1664
+ pg_tablespace_spcname_index             |          1664 |  1664
+ pg_pltemplate_name_index                |          1664 |  1664
+ pg_shdepend_depender_index              |          1664 |  1664
+ pg_shdepend_reference_index             |          1664 |  1664
+ pg_shdescription_o_c_index              |          1664 |  1664
+ pg_authid                               |          1664 |  1664
+ pg_shseclabel_object_index              |          1664 |  1664
+ pg_database                             |          1664 |  1664
+ pg_db_role_setting                      |          1664 |  1664
+ pg_tablespace                           |          1664 |  1664
+ pg_pltemplate                           |          1664 |  1664
+ pg_auth_members                         |          1664 |  1664
+ pg_shdepend                             |          1664 |  1664
+ pg_shdescription                        |          1664 |  1664
+ pg_shseclabel                           |          1664 |  1664
+ pg_db_role_setting_databaseid_rol_index |          1664 |  1664
+(28 filas)
+
+
+
 select spcname,SUM(pg_total_relation_size(c.oid))as TAM_EN_BYTES from pg_class c,pg_tablespace t
 where c.reltablespace=t.oid group by spcname;
 
@@ -237,5 +242,19 @@ SELECT (spcname)as tablespace,
 --------------+------------+------------
  tablaespacio | 8192 bytes | 8192 bytes
  pg_global    | 672 kB     | 469 kB*/
+ 
+ 
+ 
+ 
+ SELECT (spcname)as tablespace,
+	    SUM(pg_total_Relation_size(c.oid))as TAM_ACT,
+		(pg_tablespace_size(spcname))as TAM_TOT,
+		(pg_size_pretty(SUM(pg_total_Relation_size(c.oid))))as tam_act_mb,
+		(pg_size_pretty(pg_tablespace_size(spcname)))as tam_tot_mb
+		FROM pg_class c,pg_tablespace t 
+		WHERE t.oid=c.reltablespace
+		GROUP BY tablespace;
+
+
 
   
