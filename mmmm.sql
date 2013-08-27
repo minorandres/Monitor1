@@ -120,5 +120,122 @@ maynor=# vacuum;
  relativo de dichos objetos.TAMANO EN BYTES*/
  SELECT   c.relname,t.spcname,(pg_total_relation_size(c.oid))as TAM_EN_BYTES 
 	FROM pg_class c,pg_tablespace t 
-	WHERE t.spcname='pg_default'
+	WHERE t.spcname='pg_global'
 	ORDER BY spcname,tam_en_bytes DESC;
+	
+ SELECT   t.spcname,pg_size_pretty(pg_tablespace_size(t.spcname))as TOTAL,
+		  SUM(pg_total_relation_size(c.oid))as TAM_EN_BYTES,
+		  pg_size_pretty(SUM(pg_total_relation_size(c.oid)))as TAM_EN_MB
+	FROM pg_class c,pg_tablespace t WHERE t.spcname='pg_global'
+	GROUP BY t.spcname;
+	
+	
+SELECT 
+  c.relname, 
+  t.spcname 
+FROM 
+  pg_class c 
+    JOIN pg_tablespace t ON c.reltablespace = t.oid 
+WHERE 
+  t.spcname = 'indexes_old';
+  
+  
+/* HAY UN PROBLEMA GRANDE DE INCONSISTENCIA EN POSTGRES
+postgres=# select c.relname,c.reltablespace from pg_class c;
+                 relname                 | reltablespace
+-----------------------------------------+---------------
+ pg_statistic                            |             0
+ pg_type                                 |             0
+ pg_toast_16410                          |             0
+ pg_toast_16410_index                    |             0
+ musica                                  |             0
+ pg_toast_2619                           |             0
+ pg_toast_2619_index                     |             0
+ pg_authid_rolname_index                 |          1664
+ pg_authid_oid_index                     |          1664
+ pg_attribute_relid_attnam_index         |             0
+ pg_attribute_relid_attnum_index         |             0
+
+
+postgres=# select spcname,oid from pg_tablespace;
+  spcname   | oid
+------------+------
+ pg_default | 1663
+ pg_global  | 1664
+(2 filas)
+
+
+postgres=# select relname,reltablespace,t.oid from pg_class c,pg_tablespace t
+where c.reltablespace=t.oid
+postgres-# ;
+                 relname                 | reltablespace | oid
+-----------------------------------------+---------------+------
+ pg_authid_rolname_index                 |          1664 | 1664
+ pg_authid_oid_index                     |          1664 | 1664
+ pg_toast_2964                           |          1664 | 1664
+ pg_toast_2964_index                     |          1664 | 1664
+ pg_auth_members_role_member_index       |          1664 | 1664
+ pg_auth_members_member_role_index       |          1664 | 1664
+ pg_toast_2396                           |          1664 | 1664
+ pg_toast_2396_index                     |          1664 | 1664
+ pg_database_datname_index               |          1664 | 1664
+ pg_database_oid_index                   |          1664 | 1664
+ pg_tablespace_oid_index                 |          1664 | 1664
+ pg_tablespace_spcname_index             |          1664 | 1664
+ pg_pltemplate_name_index                |          1664 | 1664
+ pg_shdepend_depender_index              |          1664 | 1664
+ pg_shdepend_reference_index             |          1664 | 1664
+ pg_shdescription_o_c_index              |          1664 | 1664
+ pg_authid                               |          1664 | 1664
+ pg_shseclabel_object_index              |          1664 | 1664
+ pg_database                             |          1664 | 1664
+ pg_db_role_setting                      |          1664 | 1664
+ pg_tablespace                           |          1664 | 1664
+ pg_pltemplate                           |          1664 | 1664
+ pg_auth_members                         |          1664 | 1664
+ pg_shdepend                             |          1664 | 1664
+ pg_shdescription                        |          1664 | 1664
+ pg_shseclabel                           |          1664 | 1664
+ pg_db_role_setting_databaseid_rol_index |          1664 | 1664
+(27 filas)
+select spcname,SUM(pg_total_relation_size(c.oid))as TAM_EN_BYTES from pg_class c,pg_tablespace t
+where c.reltablespace=t.oid group by spcname;
+
+******* PROBANDO, NO APARECE NADA PARA PG_DEFAULT
+
+postgres=# select SUM(pg_total_Relation_size(c.oid))as TAM from pg_class c,pg_ta
+blespace t where t.oid=c.reltablespace and t.oid=1664;
+  tam
+--------
+ 688128
+(1 fila)
+
+
+postgres=# select SUM(pg_total_Relation_size(c.oid))as TAM from pg_class c,pg_ta
+blespace t where t.oid=c.reltablespace and t.oid='1663';
+ tam
+-----
+
+(1 fila)
+
+
+postgres=# select SUM(pg_total_Relation_size(c.oid))as TAM from pg_class c,pg_ta
+blespace t where t.oid=c.reltablespace and t.oid=16417;
+ tam
+------
+ 8192
+(1 fila)
+
+SELECT (spcname)as tablespace,
+	    (pg_size_pretty(SUM(pg_total_Relation_size(c.oid))))as TAM_ACT,
+		(pg_size_pretty(pg_tablespace_size(spcname)))as TAM_TOT
+		FROM pg_class c,pg_tablespace t 
+		WHERE t.oid=c.reltablespace
+		GROUP BY tablespace;
+
+  tablespace  |  tam_act   |  tam_tot
+--------------+------------+------------
+ tablaespacio | 8192 bytes | 8192 bytes
+ pg_global    | 672 kB     | 469 kB*/
+
+  
