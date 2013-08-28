@@ -24,7 +24,7 @@ public class ConectorSQL {
      
      public boolean conectar(String usuario,String contrasena,String puerto,String ip) {
         try {
-            Class.forName("org.postgresql.Driver");
+            Class.forName("oracle.jdbc.driver.OracleDriver");
 
         } catch (ClassNotFoundException e) { 
             JOptionPane.showMessageDialog(null, "No se encontro el Driver JDBC de PostgreSQL", "Error", JOptionPane.ERROR_MESSAGE);
@@ -34,9 +34,9 @@ public class ConectorSQL {
         conexion = null;
         try {
             conexion = DriverManager.getConnection(
-                    "jdbc:postgresql://"+ip+":"+puerto+"/postgres", usuario,
+                    "jdbc:oracle:thin:"+ip+":"+puerto+":"+"mkyong",usuario,
                     contrasena);
-            // "jdbc:postgresql://localhost:5432/postgres", "postgres(BD)", "root");
+            // "jdbc:postgresql://localhost:1521/postgres", "postgres(BD)", "root");
             conexion.setAutoCommit(false);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Fallo la conexion, revise los datos", "Error", JOptionPane.ERROR_MESSAGE);
