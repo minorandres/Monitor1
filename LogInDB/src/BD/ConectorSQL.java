@@ -34,9 +34,9 @@ public class ConectorSQL {
         conexion = null;
         try {
             conexion = DriverManager.getConnection(
-                    "jdbc:oracle:thin:"+ip+":"+puerto+":"+"mkyong",usuario,
+                    "jdbc:oracle:thin:@//"+ip+":"+puerto+"/"+"XE",usuario,
                     contrasena);
-            // "jdbc:postgresql://localhost:1521/postgres", "postgres(BD)", "root");
+            // "jdbc:oracle:thin:@//localhost:1521/XE", "system", "root");
             conexion.setAutoCommit(false);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Fallo la conexion, revise los datos", "Error", JOptionPane.ERROR_MESSAGE);
