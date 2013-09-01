@@ -49,6 +49,7 @@ public class ConectorSQL {
         } else{            
             System.out.println("Conexion BD exitosa");getTableSpaces();
         }
+        getAllObjectsFromTableSpace();
         return true;
     }
      
@@ -73,20 +74,30 @@ public class ConectorSQL {
              return datos;
      }
      
-     public String getAllObjectsFromTableSpace(String tableSpace){ 
+     public String getAllObjectsFromTableSpace(){ 
          String datos="";       
          try {
              conexion.setAutoCommit(false);
              stmt = conexion.createStatement();
-             ResultSet resultados = stmt.executeQuery( ""
-              + " SELECT   c.relname,t.spcname,(pg_total_relation_size(c.oid))as TAM_EN_BYTES " +
-                "FROM pg_class c,pg_tablespace t " +
-                "WHERE t.spcname='"+tableSpace+"' "+
-                "ORDER BY spcname,tam_en_bytes DESC;");
+             ResultSet resultados = stmt.executeQuery( 
+               "SELECT datafile.tablespace_name chr(39)||'TableSpace'||chr(39),"+
+                "usado chr(39)||'usado'||chr(39),"+
+		"(datafile.total - t.usado) chr(39)'||libre'||chr(39),"+
+                     "datafile.total chr(39)||'total'||chr(39),"+
+            "(100*((datafile.total - t.usado)/datafile.total)) chr(39)||'% libre'||chr(39)"+ 
+		 " FROM (SELECT tablespace_name,(SUM(bytes)/1048576) total"+
+        " FROM dba_data_files GROUP BY tablespace_name) datafile,"+
+		"(SELECT (SUM(bytes)/(1048576)) usado,tablespace_name"+
+		" FROM dba_segments GROUP BY tablespace_name) t"+
+		" WHERE datafile.tablespace_name=t.tablespace_name;"                   
+                     );
              while ( resultados.next() ) {
-                String  name = resultados.getString("relname");
-                String size= resultados.getString("tam_en_bytes");
-                datos+=name+","+size+"\n";
+                String  TableSpace = resultados.getString("TableSpace");
+                String usado= resultados.getString("usado");
+                String libre= resultados.getString("libre");
+                String total= resultados.getString("total");
+                String plibre= resultados.getString("% libre");
+                datos+=TableSpace+","+usado+"\n";
              }
              resultados.close();
              stmt.close();

@@ -17,12 +17,12 @@ public class TableSpaces extends javax.swing.JFrame {
      */
     public TableSpaces() {
         initComponents();        
-        addtablespaceToTable();
+       // addtablespaceToTable();
         this.setResizable(false);
         
     }
     
-    public void addtablespaceToTable(){
+   /* public void addtablespaceToTable(){
         String[] filas; 
         String[] columnas;
         filas = Conector.conectorBD.getTableSpaces().split("\n");        
@@ -31,7 +31,7 @@ public class TableSpaces extends javax.swing.JFrame {
             columnas= fila.split(",");            
             modelo.addRow(new Object[]{columnas[0],columnas[1],null,null});//columnas[2],columnas[3]});
        } 
-    }
+    }*/
 
     /**
      * This method is called from within the constructor to initialize the form.
