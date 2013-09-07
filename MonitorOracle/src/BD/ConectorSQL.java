@@ -51,11 +51,41 @@ public class ConectorSQL {
         } else{            
             System.out.println("Conexion BD exitosa");//getTableSpaces();
         }
-        getAllObjectsFromTableSpace();
+        getInfoTableSpaces();
+        getObjetosEnTableSpace("ACADEMICO");
         return true;
     }
 
-     public String getAllObjectsFromTableSpace(){ 
+ 
+     public String getObjetosEnTableSpace(String tableSpace){
+         String query= "SELECT SEGMENT_NAME, (SUM(BYTES)/1024/1024) TAM"+
+                        " FROM DBA_EXTENTS"+
+                        " WHERE TABLESPACE_NAME = '"+tableSpace+"'"+
+                        " GROUP BY SEGMENT_NAME";
+         try {
+            stmt = conexion.createStatement();
+              try (ResultSet resultados = stmt.executeQuery(query)) {
+                 while ( resultados.next() ) {
+                    String  segmento = resultados.getString("SEGMENT_NAME");
+                    String tam= resultados.getString("TAM");
+                    System.out.println(segmento+","+tam);
+                    query+=segmento+","+tam+"\n";
+                 }
+             }
+             stmt.close();
+         } catch (SQLException ex) {
+             Logger.getLogger(ConectorSQL.class.getName()).log(Level.SEVERE, null, ex);
+         }         
+             return query;  
+     }
+     
+         /*
+      * devuelve info de todos los ts
+      * en el formato:
+      * tablespace,usado,libre,total,%libre
+      */
+     
+     public String getInfoTableSpaces(){ 
          String datos="";       
          try {
             stmt = conexion.createStatement();
