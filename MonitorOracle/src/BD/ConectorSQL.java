@@ -52,7 +52,7 @@ public class ConectorSQL {
             System.out.println("Conexion BD exitosa");//getTableSpaces();
         }
         getInfoTableSpaces();
-        getObjetosEnTableSpace("ACADEMICO");
+        getObjetosEnTableSpace("ACADEMICO");// parametro es el nombre dl ts
         return true;
     }
 

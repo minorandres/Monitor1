@@ -38,13 +38,17 @@ CREATE OR REPLACE PROCEDURE PROCESO
 	IS
 		 sql_str VARCHAR2(1000);
 		 aaa VARCHAR2(100);
+		 feza DATE;
 	BEGIN
-		SELECT SUM(BYTES)/1024/1024 INTO AAA FROM DBA_EXTENTS WHERE TABLESPACE_NAME = 'ACADEMICO' AND segment_name='PANCHOS' GROUP BY SEGMENT_NAME;
-		--FOR E IN (SELECT name from v$tablespace)
-		--LOOP
-			sql_str := 'INSERT INTO bonito values('''||aaa||''')';
-			EXECUTE IMMEDIATE sql_str;
-		--END LOOP;
+		--select count(*) into aaa from fechas;
+		sql_str := 'SELECT COUNT(*) from fechas';--('''||aaa||''')';
+		EXECUTE IMMEDIATE sql_str INTO aaa;
+		sql_str := 'INSERT INTO bonito values('''||aaa||''')';
+		EXECUTE IMMEDIATE sql_str;
+		exception
+			when no_data_found then 	
+				sql_str := 'INSERT INTO bonito values(''kkkkkk'')';
+				EXECUTE IMMEDIATE sql_str;
 	END PROCESO;
 /
 
@@ -152,29 +156,105 @@ select count(*)
 from user_tab_columns
 where table_name='BONITO'
 
-
+CREATE TABLE REGISTROS(
+	tabla varchar2(100),
+	tablespace varchar2(100),
+	fecha DATE,
+	total_registros number,
+	tamanio_total_mb NUMBER,
+	nuevos_registros number
+	);
+set serveroutput on;	
 CREATE OR REPLACE PROCEDURE REGISTRAR	
 	IS
 		 sql_str VARCHAR2(1000);
-		 auxiliar VARCHAR2(100);
-		 auxnum int;
-		 fecha DATE;
+		 tam NUMBER;
+		 tam_act NUMBER;
+		 nuevos_reg int;
 	BEGIN
 		FOR tablespace IN (SELECT NAME from V$TABLESPACE)	
 		LOOP
-			FOR tabla IN (select SEGMENT_NAME,SUM(BYTES)/1024/1024 from dba_EXTENTS where TABLESPACE_NAME=tablespace.NAME)
-			LOOP
-				SELECT COUNT(*) FROM tabla.SEGMENT_NAME;
-				SELECT SUM(BYTES)/1024/1024 INTO auxiliar FROM DBA_EXTENTS WHERE TABLESPACE_NAME = tablespace.name  AND segment_name=tabla.SEGMENT_NAME GROUP BY SEGMENT_NAME;
-				sql_str := 'INSERT INTO REGISTRO VALUES('''||tabla.SEGMENT_NAME||''','''tablespace.NAME||''','''||SYSDATE||''','''||
+			dbms_output.put_line(''||tablespace.name||'');
+			FOR tabla IN (select SEGMENT_NAME,SUM(BYTES)/1024/1024 from dba_EXTENTS where TABLESPACE_NAME=tablespace.NAME group by SEGMENT_NAME)
+			LOOP dbms_output.put_line('''TABLA: '||tablespace.name||'');
+				---total individuos
+				sql_str := 'SELECT COUNT(*) into tam_act FROM '||tabla.SEGMENT_NAME;	
+				EXECUTE IMMEDIATE sql_str;				
+				--proc devuelve el valor de nuevos reg buscando el ultimo reg existente y restando el total act y el del existente
+				NUEVOS_INDIVIDUOS(tam_act,nuevos_reg);
+				--tamanio
+				SELECT SUM(BYTES)/1024/1024 INTO tam FROM DBA_EXTENTS WHERE TABLESPACE_NAME = tablespace.name  AND segment_name=tabla.SEGMENT_NAME GROUP BY SEGMENT_NAME;--tamanio
+				--insertando todo en tabla de registro
+				sql_str := 'INSERT INTO REGISTRO VALUES(
+							'''||tabla.SEGMENT_NAME||
+							''','''||tablespace.NAME||
+							''','''||SYSDATE||''','''
+							||tam_act||''','''||tam||
+							''','''||nuevos_reg||''')';
 				EXECUTE IMMEDIATE sql_str;
 			END LOOP;
 		END LOOP;
+		EXCEPTION
+			WHEN no_data_found THEN--- si es el primer registro
+					sql_str := 'INSERT INTO bonito values(''ERRORMALDITO'')';
+				EXECUTE IMMEDIATE sql_str;
 	   END REGISTRAR;
  /	
+ EXEC REGISTRAR;
+ 
+ 
+ CREATE OR REPLACE PROCEDURE NUEVOS_INDIVIDUOS(actual_total IN INT,nuevos OUT INT)
+	IS
+		anterior_total int;		
+	BEGIN
+		-- obtiener total_registros de la ultima fecha registrada(anterior)
+		select total_registros INTO anterior_total 
+		from (select total_registros 
+				from registros order by fecha desc)
+				where rownum=1;
+		--obteniendo total de nuevos registros
+		nuevos:= actual_total-anterior_total;--(RETURN)
+		EXCEPTION
+			WHEN no_data_found THEN--- si es el primer registro
+				nuevos:= actual_total;--(RETURN)
+	END NUEVOS_INDIVIDUOS;
+/
+		
+		
+		
+		
+		
+		
+		select nuevos_registros into AUXNUM 
+		from (select nuevos_registros 
+				from registro where fecha<fecha_act
+				and registro.tabla=tabla.SEGMENT_NAME order by fecha desc) where rownum=1;
+		EXCEPTION
+			WHEN no_data_found THEN
+				RETURN 0;
+	END NUEVOS_INDIVIDUOS;
+/
+
+
 
 bysecond_clause = "BYSECOND" "=" second_list
    second_list = second ( "," second)*
    second = 0 through 59
    
    
+DROP USER miusuario CASCADE;
+
+CREATE USER miusuario IDENTIFIED BY miclavesecreta
+       DEFAULT TABLESPACE ACADEMICO 
+       TEMPORARY TABLESPACE temp
+       QUOTA UNLIMITED ON ACADEMICO;
+
+CREATE ROLE programador;
+
+GRANT CREATE session, CREATE table, CREATE view, 
+      CREATE procedure,CREATE synonym,
+      ALTER table, ALTER view, ALTER procedure,ALTER synonym,
+      DROP table, DROP view, DROP procedure,DROP synonym,
+      TO miusuario;
+
+GRANT programador TO miusuario;
