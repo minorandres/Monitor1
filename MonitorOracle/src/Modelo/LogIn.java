@@ -93,6 +93,7 @@ public class LogIn extends Observable{
     }
 
 
+
     public void setValores(String text, String text0, String text1, String text2) {
         usuario=text;
         contrasena=text0;
