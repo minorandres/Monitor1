@@ -56,7 +56,32 @@ public class ConectorSQL {
         return true;
     }
 
- 
+     public String getInfoTablaRegistro(){
+         String query = "SELECT * FROM REGISTROS ORDER BY TABLA,FECHA ASC";
+         
+          try {
+            stmt = conexion.createStatement();
+              try (ResultSet resultados = stmt.executeQuery(query)) {
+                 while ( resultados.next() ) {
+                    String  tabla = resultados.getString("TABLA");
+                    String  tablespace = resultados.getString("TABLESPACE");
+                    String  fecha = resultados.getString("FECHA");
+                    String  total_registros = resultados.getString("TOTAL_REGISTROS");
+                    String  tamanio_total_mb = resultados.getString("TAMANIO_TOTAL_MB");
+                    String  nuevos_registros = resultados.getString("NUEVOS_REGISTROS");
+                    System.out.println(tabla+","+tablespace+","+fecha+","+total_registros+","+
+                            tamanio_total_mb+","+nuevos_registros);
+                    query+=tabla+","+tablespace+","+fecha+","+total_registros+","+
+                            tamanio_total_mb+","+nuevos_registros+"\n";
+                 }
+             }
+             stmt.close();
+         } catch (SQLException ex) {
+             Logger.getLogger(ConectorSQL.class.getName()).log(Level.SEVERE, null, ex);
+         }         
+
+         return query;
+     }
      public String getObjetosEnTableSpace(String tableSpace){
          String query= "SELECT SEGMENT_NAME, (SUM(BYTES)/1024/1024) TAM"+
                         " FROM DBA_EXTENTS"+

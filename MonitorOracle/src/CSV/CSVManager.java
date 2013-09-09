@@ -16,6 +16,7 @@ public class CSVManager {
     
     public CSVManager(){}
     
+    
     public String[] lector() {
         BufferedReader CSVFile = null;
         String[] dataArray=null;
@@ -36,6 +37,23 @@ public class CSVManager {
             }
             System.out.print("lectura: "+dataArray.toString());
            return dataArray;
+    }
+    
+     
+    public void escritorDatosHistoricos(String datosH){
+        try {
+            FileWriter writer = new FileWriter("DatosHistóricos.csv");
+             String[] dataArray = datosH.split(",");
+             for(String item : dataArray){
+                 writer.append(item);
+                 System.out.println("Escribiendo datos históricos" + item + ",");
+                 writer.append(',');
+             }
+             writer.flush();
+             writer.close();
+        } catch (IOException ex) {
+            Logger.getLogger(CSVManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void escritor(String datos){
