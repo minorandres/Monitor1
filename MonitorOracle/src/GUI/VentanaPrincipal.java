@@ -346,13 +346,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }
 
     public void addtablespaceInfoToTable() {
-        String ordenes=Conector.conectorBD.getInfoTableSpaces().split("\n");
-        String[] filas;
+        String[] filas=Conector.conectorBD.getInfoTableSpaces().split("\n");
         String[] columnas;
-        filas = ordenes.split("\n");
         DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
         for (String fila : filas) {
             columnas = fila.split(",");
+            //                          tablespace+","+usado+","+libre+","+total+","+%libre+"\n";
             modelo.addRow(new Object[]{columnas[0], columnas[1],columnas[2],columnas[3],columnas[4], null, null});//columnas[2],columnas[3]});
         }
 

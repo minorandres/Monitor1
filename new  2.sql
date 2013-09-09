@@ -1,10 +1,11 @@
 CREATE TABLE REGISTROS(
-	tabla varchar2(20),
-	tablespace varchar2(20),
+	tabla varchar2(500),
+	tablespace varchar2(500),
 	fecha DATE,
-	total_registros int,
-	tamanio_total_mb int,
-	nuevos_registros int
+	total_registros NUMBER,
+	tamanio_total_mb NUMBER,
+	nuevos_registros NUMBER,
+	CONSTRAINT  PKREGISTROS PRIMARY KEY (tabla,tablespace,fecha)
 	);
 
 
