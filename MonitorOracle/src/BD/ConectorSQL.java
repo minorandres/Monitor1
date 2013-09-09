@@ -121,19 +121,5 @@ public class ConectorSQL {
          }         
              return datos;     
      }
-     public void StringAValores(String cadena,Object[] vector){
-         int parametro=0;
-         String palabra="";
-         Object objeto=new Object();
-         for(int i=0;i<=cadena.length();i++){
-         if(cadena.charAt(i)!=','){
-         palabra+=cadena.charAt(i);
-         }else{
-         vector[parametro]=palabra;
-         parametro++;
-         palabra="";
-         }
-         }
-     
-     } 
+   
 }
