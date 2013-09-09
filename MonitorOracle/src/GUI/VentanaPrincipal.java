@@ -304,8 +304,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         setResizable(true);
         setLocationByPlatform(true);
         setLocationRelativeTo(null);
-//        this.pastel.setVisible(false);
-        addtablespaceInfoToTable();
+//        this.pastel.setVisible(false);        
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
@@ -314,6 +313,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
         initComponents();
+        addtablespaceInfoToTable();
         
     }
 
