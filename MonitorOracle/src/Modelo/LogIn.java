@@ -91,8 +91,10 @@ public class LogIn extends Observable{
     public void escritor(String recordarEstosDatos) {
         csv.escritor(recordarEstosDatos);
     }
-
-
+    
+    public void escribirDatosHistorial(String datos){
+        csv.escritorDatosHistoricos(datos);
+    }
 
     public void setValores(String text, String text0, String text1, String text2) {
         usuario=text;

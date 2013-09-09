@@ -58,12 +58,14 @@ public class ConectorSQL {
 
      public String getInfoTablaRegistro(){
          String query = "SELECT * FROM REGISTROS ORDER BY TABLA,FECHA ASC";
+       
          
           try {
             stmt = conexion.createStatement();
               try (ResultSet resultados = stmt.executeQuery(query)) {
                  while ( resultados.next() ) {
-                    String  tabla = resultados.getString("TABLA");
+                  
+                    String  tabla = resultados.getString("TABLA");  System.out.println("Esta es la tabla: "+tabla);
                     String  tablespace = resultados.getString("TABLESPACE");
                     String  fecha = resultados.getString("FECHA");
                     String  total_registros = resultados.getString("TOTAL_REGISTROS");

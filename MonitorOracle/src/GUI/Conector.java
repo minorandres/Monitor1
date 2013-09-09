@@ -47,6 +47,11 @@ public class Conector extends javax.swing.JFrame implements Observer{
             System.exit(0);
         }
     }
+    
+    public void exportarDatos(){
+        String datos = conectorBD.getInfoTablaRegistro();
+        login.escribirDatosHistorial(datos);
+    }
 
     
     //para poner los datos que han sido recordados
