@@ -39,15 +39,15 @@ public class CSVManager {
            return dataArray;
     }
     
-     
-    public void escritorDatosHistoricos(String datosH){
+
+    public void escritorDatosHistoricos(String datosH){//formato tabla,ts,fecha,etc \n tabla,ts,fecha,etc\n...
         try {
             FileWriter writer = new FileWriter("DatosHistóricos.csv");
-             String[] dataArray = datosH.split(",");
-             for(String item : dataArray){
+             String[] filas = datosH.split("\n");
+             for(String item : filas){
                  writer.append(item);
-                 System.out.println("Escribiendo datos históricos" + item + ",");
-                 writer.append(',');
+                 System.out.println("Escribiendo datos históricos" + item + "\n");
+                 writer.append('\n');
              }
              writer.flush();
              writer.close();

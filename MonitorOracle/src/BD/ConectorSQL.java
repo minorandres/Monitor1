@@ -147,6 +147,5 @@ public class ConectorSQL {
              Logger.getLogger(ConectorSQL.class.getName()).log(Level.SEVERE, null, ex);
          }         
              return datos;     
-     }
-   
+     }   
 }

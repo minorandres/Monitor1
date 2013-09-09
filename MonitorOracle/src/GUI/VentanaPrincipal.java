@@ -6,6 +6,7 @@
 package GUI;
 
 import BD.ConectorSQL;
+import CSV.CSVManager;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
@@ -361,6 +362,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
    private static VentanaPrincipal instancia = null;
     private static VentanaPreferencias vent_Preferencias = null;
     public static ConectorSQL conectorBD = new ConectorSQL();
+    public CSVManager csv=new CSVManager();
 
     private void ajustarComponentes() {
         setResizable(true);
@@ -420,7 +422,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     void GraficaPastel() {
         JFreeChart chart = null;
         //grafico de pastel
-        addtablespaceInfoToTable();
+        //addtablespaceInfoToTable();
         DefaultPieDataset data = new DefaultPieDataset();
         data.setValue("Categoría 1", 20);
         data.setValue("Categoría 2", 60);
@@ -461,5 +463,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             modelo.addRow(new Object[]{columnas[0], columnas[1], columnas[2], columnas[3], columnas[4], null, null});//columnas[2],columnas[3]});
         }
 
+    }
+    
+    /* METODO PARA PONER EN LOS BOTONES/PESTAÑAS DE EXPORTAR A EXECL*/
+    
+    public void exportarCSV(){
+        csv.escritorDatosHistoricos(Conector.conectorBD.getInfoTablaRegistro());
     }
 }
