@@ -135,7 +135,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         );
         barrasLayout.setVerticalGroup(
             barrasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 436, Short.MAX_VALUE)
+            .addGap(0, 447, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout CapasLayout = new javax.swing.GroupLayout(Capas);
@@ -150,9 +150,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             CapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
             .addGroup(CapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(CapasLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(barras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(barras, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         Capas.setLayer(barras, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
