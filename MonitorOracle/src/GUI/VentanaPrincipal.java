@@ -6,15 +6,21 @@
 package GUI;
 
 import BD.ConectorSQL;
+import CSV.CSVManager;
+import java.awt.Color;
+import java.awt.GradientPaint;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
@@ -360,7 +366,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
    private static VentanaPrincipal instancia = null;
     private static VentanaPreferencias vent_Preferencias = null;
-    public static ConectorSQL conectorBD = new ConectorSQL();
+     public static ConectorSQL conectorBD = new ConectorSQL();
+    public CSVManager csv=new CSVManager();
 
     private void ajustarComponentes() {
         setResizable(true);
@@ -388,13 +395,31 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         JFreeChart chart = null;
         //grafico de barras
         DefaultCategoryDataset data = new DefaultCategoryDataset();
-        String Producto1 = "Sopas";
-        String Producto2 = "Soda";
-        String Dia1 = "Día 1";
+        String Producto1 = "Total";
+        String Producto2 = "Libre";
+        String Producto3 = "Usado";
+        
+        ArrayList<String> tablespaces=new ArrayList<>();
+        for(int i=0;i<jTable1.getRowCount();i++){
+        tablespaces.add((String)jTable1.getValueAt(i, 0));
+        }
+/*        String Dia1 = "Día 1";
         String Dia2 = "Día 2";
         String Dia3 = "Día 3";
         String Dia4 = "Día 4";
-
+*/
+       
+         for(int i=0;i<jTable1.getRowCount();i++){
+        data.addValue(Float.parseFloat((String)jTable1.getValueAt(i, 3)), Producto1, (String)jTable1.getValueAt(i, 0));
+        }
+         for(int i=0;i<jTable1.getRowCount();i++){
+        data.addValue(Float.parseFloat((String)jTable1.getValueAt(i, 2)), Producto2, (String)jTable1.getValueAt(i, 0));
+        }
+         for(int i=0;i<jTable1.getRowCount();i++){
+        data.addValue(Float.parseFloat((String)jTable1.getValueAt(i, 1)), Producto3, (String)jTable1.getValueAt(i, 0));
+        }
+    
+       /*
         data.addValue(18, Producto1, Dia1);
         data.addValue(15, Producto1, Dia2);
         data.addValue(14, Producto1, Dia3);
@@ -404,10 +429,25 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         data.addValue(45, Producto2, Dia2);
         data.addValue(31, Producto2, Dia3);
         data.addValue(10, Producto2, Dia4);
-
-        chart = ChartFactory.createBarChart("Gráfico de Barras", "Día", "Cantidad", data, PlotOrientation.HORIZONTAL, true, true, true);
+        */
+        chart = ChartFactory.createBarChart("Gráfico de Barras", "Tablespace", "Espacio en Mb", data, PlotOrientation.HORIZONTAL, true, true, true);
         CategoryPlot plot = (CategoryPlot) chart.getPlot();
         plot.setDomainGridlinesVisible(true);
+        chart.setBackgroundPaint(Color.ORANGE);
+         plot.setBackgroundPaint(Color.BLUE);
+    //Color del fondo del gráfico
+    plot.setBackgroundPaint(Color.WHITE);
+    //Lineas divisorias
+    plot.setDomainGridlinesVisible(true);
+    plot.setRangeGridlinePaint(Color.BLACK);
+    BarRenderer renderer = (BarRenderer) plot.getRenderer();
+    renderer.setDrawBarOutline(false);
+      GradientPaint gp0= new GradientPaint(0.0f,0.0f,Color.blue,0.0f,0.0f,new Color(0,0,64));
+    GradientPaint gp1= new GradientPaint(0.0f,0.0f,Color.green,0.0f,0.0f,new Color(0,64,0));
+    GradientPaint gp2= new GradientPaint(0.0f,0.0f,Color.red,0.0f,0.0f,new Color(64,0,0));
+    renderer.setSeriesPaint(0,gp0);
+    renderer.setSeriesPaint(1,gp1);
+    renderer.setSeriesPaint(2,gp2);
 
         panel = new ChartPanel(chart);
         panel.setBounds(5, 10, 410, 400);
@@ -420,7 +460,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     void GraficaPastel() {
         JFreeChart chart = null;
         //grafico de pastel
-        addtablespaceInfoToTable();
+
+
+        //addtablespaceInfoToTable();
         DefaultPieDataset data = new DefaultPieDataset();
         data.setValue("Categoría 1", 20);
         data.setValue("Categoría 2", 60);
@@ -461,5 +503,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             modelo.addRow(new Object[]{columnas[0], columnas[1], columnas[2], columnas[3], columnas[4], null, null});//columnas[2],columnas[3]});
         }
 
+    }
+    
+    /* METODO PARA PONER EN LOS BOTONES/PESTAÑAS DE EXPORTAR A EXECL*/
+    
+    public void exportarCSV(){
+        csv.escritorDatosHistoricos(Conector.conectorBD.getInfoTablaRegistro());
     }
 }
