@@ -121,5 +121,31 @@ public class ConectorSQL {
          }         
              return datos;     
      }
-   
+   public String getInfoTablaRegistro(){
+         String query = "SELECT tabla,tablespace,fecha,total_registros,"
+                 + "tamanio_total_mb,nuevos_registros FROM REGISTROS "
+                 + "ORDER BY TABLA,FECHA ASC";   
+          try {
+            stmt = conexion.createStatement();
+              try (ResultSet resultados = stmt.executeQuery(query)) {
+                  query="";
+                 while ( resultados.next() ) {                  
+                    String  tabla = resultados.getString("TABLA");  System.out.println("Esta es la tabla: "+tabla);
+                    String  tablespace = resultados.getString("TABLESPACE");
+                    String  fecha = resultados.getString("FECHA");
+                    String  total_registros = resultados.getString("TOTAL_REGISTROS");
+                    String  tamanio_total_mb = resultados.getString("TAMANIO_TOTAL_MB");
+                    String  nuevos_registros = resultados.getString("NUEVOS_REGISTROS");
+                    System.out.println(tabla+","+tablespace+","+fecha+","+total_registros+","+
+                            tamanio_total_mb+","+nuevos_registros);
+                    query+=tabla+","+tablespace+","+fecha+","+total_registros+","+
+                            tamanio_total_mb+","+nuevos_registros+"\n";
+                 }
+             }
+             stmt.close();
+         } catch (SQLException ex) {
+             Logger.getLogger(ConectorSQL.class.getName()).log(Level.SEVERE, null, ex);
+         }        
+         return query;
+     }
 }
