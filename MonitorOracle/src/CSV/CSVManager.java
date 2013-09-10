@@ -56,5 +56,19 @@ public class CSVManager {
 	     e.printStackTrace();
 	} 
     }
-    
+     public void escritorDatosHistoricos(String datosH){//formato tabla,ts,fecha,etc \n tabla,ts,fecha,etc\n...
+        try {
+            FileWriter writer = new FileWriter("DatosHistóricos.csv");
+             String[] filas = datosH.split("\n");
+             for(String item : filas){
+                 writer.append(item);
+                 System.out.println("Escribiendo datos históricos" + item + "\n");
+                 writer.append('\n');
+             }
+             writer.flush();
+             writer.close();
+        } catch (IOException ex) {
+            Logger.getLogger(CSVManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
