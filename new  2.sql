@@ -13,11 +13,11 @@ CREATE TABLE REGISTROS(
 create table a(algo varchar(100));
 
 BEGIN
-DBMS_SCHEDULER.CREATE_JOB(job_name        => 'JOB1',
+DBMS_SCHEDULER.CREATE_JOB(job_name        => 'MANTENIMIENTO_DBA',
                           job_type        => 'PLSQL_BLOCK',
                           JOB_ACTION      => 'BEGIN PROCESO; END;',
-                          start_date      => '04-SEP-13 11.18.00PM',
-                          repeat_interval => 'FREQ=MINUTELY;INTERVAL=3',
+                          start_date      => '10-SEP-13 03.22.00AM',
+                          repeat_interval => 'FREQ=DAILY;',
                           end_date        => NULL,
                           enabled         => TRUE,
                           comments        => 'Calls PLSQL once');
@@ -26,9 +26,33 @@ END;
 
 BEGIN
 DBMS_SCHEDULER.RUN_JOB (
-   'yuri',TRUE);
+   'MANTENIMIENTO_DBA',TRUE);
    END;
 /
+
+
+CREATE OR REPLACE PROCEDURE P001
+IS
+	fecha timestamp;
+BEGIN
+	select cast(sysdate as timestamp) INTO fecha from dual;
+	insert into prueba values(fecha);
+   END;
+/
+BEGIN
+DBMS_SCHEDULER.CREATE_JOB(job_name        => 'PR',
+                          job_type        => 'PLSQL_BLOCK',
+                          JOB_ACTION      => 'BEGIN P001; END;',
+                          start_date      => '09-SEP-13 09.41.00PM',
+                          repeat_interval => 'FREQ=MINUTELY;',
+                          end_date        => NULL,
+                          enabled         => TRUE,
+                          comments        => 'Calls PLSQL once');
+END;
+/
+
+
+
 
 exec dbms_scheduler.drop_job('yuri', TRUE);
 

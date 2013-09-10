@@ -244,4 +244,4 @@ DBMS_SCHEDULER.CREATE_JOB(job_name        => 'MANTENIMIENTO_DBA',
 END;
 /
 
---exec dbms_scheduler.drop_job('MANTENIMIENTO_DBA', TRUE);
+--exec dbms_scheduler.dro
