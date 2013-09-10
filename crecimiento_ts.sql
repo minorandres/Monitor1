@@ -1,6 +1,6 @@
 CREATE TABLE LLENADO(
 	TABLESPACE VARCHAR2(500),
-	DIAS NUMBER
+	DIAS VARCHAR2(500)
 	);
 	
 CREATE TABLE TAM_MAX_TABLA(
@@ -38,13 +38,13 @@ CREATE OR REPLACE PROCEDURE	CALC_TABLESPACE(ESPACIO IN VARCHAR2)
 	BEGIN
 		SELECT SUM(tam) INTO suma FROM TAM_MAX_TABLA WHERE TABLESPACE=ESPACIO;
 		SELECT COUNT(*) INTO contador FROM TAM_MAX_TABLA WHERE TABLESPACE=ESPACIO;--N tablas
-		IF contador > 0 THEN
+		IF contador > 0 THEN -- hay tablespace sin actividad de ningun tipo
 			r:=ROUND((SUMA/contador));		
 			dbms_output.put_line(ESPACIO||'x'||r);
-			query :='INSERT INTO LLENADO VALUES('''||ESPACIO||''','||r||')';
+			query :='INSERT INTO LLENADO VALUES('''||ESPACIO||''','''||r||''')';
 			EXECUTE IMMEDIATE query;	
 		ELSE
-			query :='INSERT INTO LLENADO VALUES('''||ESPACIO||''','||r||')';
+			query :='INSERT INTO LLENADO VALUES('''||ESPACIO||''','''||'INDEFINIDO'')';
 			EXECUTE IMMEDIATE query;	
 		END IF;
 	END;
