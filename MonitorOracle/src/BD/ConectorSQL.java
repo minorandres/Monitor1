@@ -57,14 +57,14 @@ public class ConectorSQL {
     }
 
      public String getInfoTablaRegistro(){
-         String query = "SELECT * FROM REGISTROS ORDER BY TABLA,FECHA ASC";
-       
-         
+         String query = "SELECT tabla,tablespace,fecha,total_registros,"
+                 + "tamanio_total_mb,nuevos_registros FROM REGISTROS "
+                 + "ORDER BY TABLA,FECHA ASC";   
           try {
             stmt = conexion.createStatement();
               try (ResultSet resultados = stmt.executeQuery(query)) {
-                 while ( resultados.next() ) {
-                  
+                  query="";
+                 while ( resultados.next() ) {                  
                     String  tabla = resultados.getString("TABLA");  System.out.println("Esta es la tabla: "+tabla);
                     String  tablespace = resultados.getString("TABLESPACE");
                     String  fecha = resultados.getString("FECHA");
@@ -80,10 +80,10 @@ public class ConectorSQL {
              stmt.close();
          } catch (SQLException ex) {
              Logger.getLogger(ConectorSQL.class.getName()).log(Level.SEVERE, null, ex);
-         }         
-
+         }        
          return query;
      }
+     
      public String getObjetosEnTableSpace(String tableSpace){
          String query= "SELECT SEGMENT_NAME, (SUM(BYTES)/1024/1024) TAM"+
                         " FROM DBA_EXTENTS"+
